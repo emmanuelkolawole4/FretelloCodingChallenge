@@ -1,12 +1,11 @@
 
 import Foundation
 
-final class PracticeSessionsDataLoader {
-    static let shared = PracticeSessionsDataLoader()
-}
+final class PracticeSessionsDataLoader { static let shared = PracticeSessionsDataLoader() }
 
 //MARK: - Practice Sessions Data Loader
 extension PracticeSessionsDataLoader {
+    
     func loadPracticeSessionsData(success: @escaping ([PracticeSession]) -> Void, failure: @escaping (String) -> Void) {
         let session = URLSession.shared
         guard let url = URL(string: ApiStringConstants.url) else { return }
@@ -36,4 +35,5 @@ extension PracticeSessionsDataLoader {
         })
         task.resume()
     }
+    
 }

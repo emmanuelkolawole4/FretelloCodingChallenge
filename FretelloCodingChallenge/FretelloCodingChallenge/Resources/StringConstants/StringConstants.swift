@@ -3,6 +3,8 @@ import Foundation
 
 enum ApiStringConstants {
     static let url = "http://codingtest.fretello.com:3000/data/sessions.json"
+    static let imageBaseUrl = "http://codingtest.fretello.com:3000/img/"
+    static let png = ".png"
 }
 
 enum Errors {
@@ -26,5 +28,5 @@ enum PracticeSessionsCellConstants {
 enum PracticeSessionsVCStringConstants {
     static let cellId = "cellId"
     static let fretelloImage = "fretelloImage"
-    static let maximumPerformance = "Maximum Practice Performance is "
+    static let maximumPerformance = "Max practice performance % increase: "
 }

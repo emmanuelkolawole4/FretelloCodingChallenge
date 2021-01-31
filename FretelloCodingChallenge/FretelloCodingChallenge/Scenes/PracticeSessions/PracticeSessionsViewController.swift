@@ -20,6 +20,13 @@ class PracticeSessionsViewController: UIViewController {
         return banner
     }()
     
+    let maximumPracticePerformanceIncreaseLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 14, weight: .semibold)
+        return label
+    }()
+    
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.frame = .zero
@@ -36,6 +43,14 @@ class PracticeSessionsViewController: UIViewController {
             make.left.equalTo(view.snp.left).offset(0)
             make.right.equalTo(view.snp.right).offset(0)
             make.height.equalTo(view.snp.height).multipliedBy(0.4)
+        }
+    }
+    
+    func setupMaximumPracticePerformanceIncreaseLabel() {
+        view.addSubview(maximumPracticePerformanceIncreaseLabel)
+        maximumPracticePerformanceIncreaseLabel.snp.makeConstraints { (make) in
+            make.bottom.equalTo(banner).offset(-10)
+            make.left.equalTo(banner).offset(10)
         }
     }
     
@@ -58,66 +73,50 @@ class PracticeSessionsViewController: UIViewController {
     
     func setupViews() {
         setupBanner()
+        setupMaximumPracticePerformanceIncreaseLabel()
         setupTableView()
         tableView.delegate = self
         tableView.dataSource = self
     }
     
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
+    override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
     
-    func injectView() {
-        PracticeSessionsPresenter.shared.practiceSessionsView = self
-    }
+    func injectView() { PracticeSessionsPresenter.shared.practiceSessionsView = self }
     
 }
 
 
 extension PracticeSessionsViewController: PracticeSessionsDisplayLogic {
+    
     func displayPracticeSessions(sessions: [PracticeSession]) {
-        practiceSessions = sessions
+        practiceSessions = sessions.reversed()
+        var exercises = [[Int]]()
+        
+        guard let unwrappedPracticeSessions = practiceSessions else { return }
+        for practiceSession in unwrappedPracticeSessions {
+            var exercisesBpms = [Int]()
+            for exercise in practiceSession.exercises {
+                exercisesBpms.append(exercise.practicedAtBpm)
+            }
+            exercises.append(exercisesBpms)
+        }
+        
+        let maximumIncrease = PercentageMaximumIncrease.shared.getMaximumAverage(of: exercises.reversed())
+        print(maximumIncrease)
+        
         DispatchQueue.main.async {
+            self.maximumPracticePerformanceIncreaseLabel.text = "\(PracticeSessionsVCStringConstants.maximumPerformance) \(maximumIncrease)"
             self.tableView.reloadData()
         }
+        
     }
     
-    func displayPracticeSessionsError(prompt: String) {
-        presentAlertForNetworkError(with: prompt)
-    }
+    func displayPracticeSessionsError(prompt: String) { presentAlertForError(with: prompt) }
+    
 }
-
 
 extension PracticeSessionsViewController: UITableViewDelegate {
 
-//    func numberOfSections(in tableView: UITableView) -> Int {
-//        return practiceSessions?.count ?? 0
-//    }
-    
-//    internal func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let headerView = UIView()
-//        headerView.backgroundColor = #colorLiteral(red: 0.6010031104, green: 0.5656787753, blue: 0.4985913038, alpha: 1)
-//
-//        let nameLabel = UILabel()
-//        nameLabel.text = (practiceSessions?[section].name)?.uppercased()
-//        nameLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-//        nameLabel.font = UIFont.boldSystemFont(ofSize: 18)
-//        nameLabel.frame = CGRect(x: 15, y: -7 , width: self.view.frame.width, height: 50)
-//        headerView.addSubview(nameLabel)
-//
-//        let dateLabel = UILabel()
-//        dateLabel.text = String((practiceSessions?[section].practicedOnDate)?.prefix(10) ?? "")
-//        dateLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-//        dateLabel.font = UIFont.boldSystemFont(ofSize: 10)
-//        dateLabel.frame = CGRect(x: 15, y: 7 , width: self.view.frame.width, height: 50)
-//        headerView.addSubview(dateLabel)
-//        return headerView
-//    }
-    
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        return 45
-//    }
-    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let rotationTransform = CATransform3DTranslate(CATransform3DIdentity, 0, -5, 0)
         cell.layer.transform = rotationTransform
@@ -127,22 +126,44 @@ extension PracticeSessionsViewController: UITableViewDelegate {
             cell.alpha = 1.0
         }
     }
+    
 }
 
 extension PracticeSessionsViewController: UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return practiceSessions?.count ?? Int()
+    
+    func numberOfSections(in tableView: UITableView) -> Int { practiceSessions?.count ?? Int() }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { practiceSessions?[section].exercises.count ?? Int() }
+    
+    internal func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = #colorLiteral(red: 0.7450980392, green: 0.3529411765, blue: 0.2196078431, alpha: 1)
+        
+        let nameLabel = UILabel()
+        nameLabel.text = (practiceSessions?[section].name)?.uppercased()
+        nameLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        nameLabel.font = UIFont.systemFont(ofSize: 15, weight: .semibold)
+        nameLabel.frame = CGRect(x: 15, y: -7 , width: self.view.frame.width, height: 40)
+        headerView.addSubview(nameLabel)
+        
+        let dateLabel = UILabel()
+        dateLabel.text = String((practiceSessions?[section].practicedOnDate)?.prefix(10) ?? "")
+        dateLabel.textColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        dateLabel.font = UIFont.systemFont(ofSize: 10, weight: .semibold)
+        dateLabel.frame = CGRect(x: 15, y: 7 , width: self.view.frame.width, height: 40)
+        headerView.addSubview(dateLabel)
+        return headerView
     }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { 40 }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: PracticeSessionsVCStringConstants.cellId, for: indexPath) as? PracticeSessionsCell
-        let exercises = practiceSessions?[indexPath.row]
-        cell?.practiceSession = exercises
+        let exercise = practiceSessions?[indexPath.section].exercises[indexPath.row]
+        cell?.exercise = exercise
         return cell ?? UITableViewCell()
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
-    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat { 100 }
     
 }

@@ -24,6 +24,8 @@
 		4CC7522F25C38EA800721CBC /* PracticeSessionsWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC7522C25C38EA800721CBC /* PracticeSessionsWorker.swift */; };
 		4CC7523E25C39CAB00721CBC /* PracticeSessionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC7523D25C39CAB00721CBC /* PracticeSessionsCell.swift */; };
 		4CC7524B25C3B1CB00721CBC /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC7524A25C3B1CB00721CBC /* UIViewController+Extensions.swift */; };
+		4CC7525E25C4E16E00721CBC /* PercentageMaximumIncreaseModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC7525D25C4E16E00721CBC /* PercentageMaximumIncreaseModule.swift */; };
+		4CC7526325C704FD00721CBC /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CC7526225C704FC00721CBC /* UIImage+Extension.swift */; };
 		BDC94CE22D8510EAA18CF8C7 /* Pods_FretelloCodingChallenge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8AEE14703F5CBB872201A9CF /* Pods_FretelloCodingChallenge.framework */; };
 /* End PBXBuildFile section */
 
@@ -67,6 +69,8 @@
 		4CC7522C25C38EA800721CBC /* PracticeSessionsWorker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PracticeSessionsWorker.swift; sourceTree = "<group>"; };
 		4CC7523D25C39CAB00721CBC /* PracticeSessionsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PracticeSessionsCell.swift; sourceTree = "<group>"; };
 		4CC7524A25C3B1CB00721CBC /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
+		4CC7525D25C4E16E00721CBC /* PercentageMaximumIncreaseModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PercentageMaximumIncreaseModule.swift; sourceTree = "<group>"; };
+		4CC7526225C704FC00721CBC /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		59FAB5B4874D9B26AD0F1B84 /* Pods-FretelloCodingChallenge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FretelloCodingChallenge.release.xcconfig"; path = "Target Support Files/Pods-FretelloCodingChallenge/Pods-FretelloCodingChallenge.release.xcconfig"; sourceTree = "<group>"; };
 		7AE18FBB7DE71F08171B9BF6 /* Pods_FretelloCodingChallengeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FretelloCodingChallengeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FE0042EC5FEA64D49959C0F /* Pods-FretelloCodingChallenge-FretelloCodingChallengeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FretelloCodingChallenge-FretelloCodingChallengeUITests.debug.xcconfig"; path = "Target Support Files/Pods-FretelloCodingChallenge-FretelloCodingChallengeUITests/Pods-FretelloCodingChallenge-FretelloCodingChallengeUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -215,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				4CC7521025C384DA00721CBC /* PracticeSessionsDataLoader.swift */,
+				4CC7525D25C4E16E00721CBC /* PercentageMaximumIncreaseModule.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -247,6 +252,7 @@
 			isa = PBXGroup;
 			children = (
 				4CC7524A25C3B1CB00721CBC /* UIViewController+Extensions.swift */,
+				4CC7526225C704FC00721CBC /* UIImage+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -498,6 +504,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4CC7526325C704FD00721CBC /* UIImage+Extension.swift in Sources */,
 				4CC7521125C384DA00721CBC /* PracticeSessionsDataLoader.swift in Sources */,
 				4CC751A325C3732100721CBC /* PracticeSessionsViewController.swift in Sources */,
 				4CC7519F25C3732100721CBC /* AppDelegate.swift in Sources */,
@@ -506,6 +513,7 @@
 				4CC7522D25C38EA800721CBC /* PracticeSessionsPresenter.swift in Sources */,
 				4CC7524B25C3B1CB00721CBC /* UIViewController+Extensions.swift in Sources */,
 				4CC7522E25C38EA800721CBC /* PracticeSessionsInteractor.swift in Sources */,
+				4CC7525E25C4E16E00721CBC /* PercentageMaximumIncreaseModule.swift in Sources */,
 				4CC7522325C3892D00721CBC /* PracticeSessionModel.swift in Sources */,
 				4CC7521925C3889300721CBC /* StringConstants.swift in Sources */,
 				4CC751A125C3732100721CBC /* SceneDelegate.swift in Sources */,

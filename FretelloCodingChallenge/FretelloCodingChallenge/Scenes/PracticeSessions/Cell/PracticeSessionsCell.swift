@@ -4,21 +4,21 @@ import SnapKit
 
 class PracticeSessionsCell: UITableViewCell {
     var cardView = UIView()
-    var sessionNameLabel = UILabel()
-    var practiceDateLabel = UILabel()
+    var exerciseNameLabel = UILabel()
     var excerciseBpmLabel = UILabel()
+    var exerciseImageView = UIImageView()
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupCardView()
-        setupSessionNameLabel()
-        setupPracticeDateLabel()
+        setupExerciseNameLabel()
         setupExcerciseBpmLabel()
+        setupExerciseImage()
     }
     
     func setupCardView() {
         contentView.addSubview(cardView)
-        cardView.layer.cornerRadius = 10
         cardView.backgroundColor = #colorLiteral(red: 0.8980392157, green: 0.7176470588, blue: 0.368627451, alpha: 1)
         cardView.sizeToFit()
         cardView.layer.masksToBounds = false
@@ -33,53 +33,50 @@ class PracticeSessionsCell: UITableViewCell {
         }
     }
     
-    func setupSessionNameLabel() {
-        cardView.addSubview(sessionNameLabel)
-        sessionNameLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
-        sessionNameLabel.textColor = .systemBackground
-        sessionNameLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(cardView.snp.top).offset(10)
+    func setupExerciseNameLabel() {
+        cardView.addSubview(exerciseNameLabel)
+        exerciseNameLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
+        exerciseNameLabel.textColor = .systemBackground
+        exerciseNameLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(cardView.snp.top).offset(5)
             make.centerX.equalTo(cardView)
         }
     }
     
-    func setupPracticeDateLabel() {
-        cardView.addSubview(practiceDateLabel)
-        practiceDateLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
-        practiceDateLabel.textColor =  .systemBackground
-        practiceDateLabel.snp.makeConstraints { (make) in
-            make.center.equalTo(cardView)
-        }
-    }
- 
     func setupExcerciseBpmLabel() {
         cardView.addSubview(excerciseBpmLabel)
         excerciseBpmLabel.font = UIFont.systemFont(ofSize: 12, weight: .semibold)
         excerciseBpmLabel.textColor = .systemBackground
         excerciseBpmLabel.snp.makeConstraints { (make) in
-            make.centerX.equalTo(cardView)
-            make.bottom.equalTo(cardView.snp.bottom).offset(-10)
+            make.left.equalTo(exerciseNameLabel)
+            make.top.equalTo(exerciseNameLabel.snp.bottom).offset(5)
         }
     }
     
-    var practiceSession: PracticeSession? {
+    func setupExerciseImage() {
+        cardView.addSubview(exerciseImageView)
+        exerciseImageView.contentMode = .scaleAspectFill
+        exerciseImageView.snp.makeConstraints { (make) in
+            make.top.equalTo(exerciseNameLabel)
+            make.left.equalTo(cardView).offset(20)
+            make.bottom.equalTo(cardView).offset(-5)
+            make.right.equalTo(exerciseNameLabel.snp.left).offset(-20)
+        }
+    }
+    
+    var exercise: Exercise? {
         didSet {
-            guard let practiceSession = practiceSession else { return }
+            guard let exercise = exercise else { return }
+            guard let imageUrl = URL(string: "\(ApiStringConstants.imageBaseUrl)\(exercise.exerciseId)\(ApiStringConstants.png)") else { return }
             contentView.backgroundColor = .systemBackground
-            
-            sessionNameLabel.text = "\(PracticeSessionsCellConstants.sessionName) \(practiceSession.name)"
-            practiceDateLabel.text = String("\(PracticeSessionsCellConstants.practisedDate) \(practiceSession.practicedOnDate.prefix(10))")
-            
-            let arrayOfExerciseBpm = practiceSession.exercises.map{$0}
-
-            for exerciseBpm in arrayOfExerciseBpm {
-                excerciseBpmLabel.text = "\(PracticeSessionsCellConstants.practisedAt) \(exerciseBpm.practicedAtBpm) \(PracticeSessionsCellConstants.bpm)"
+            UIImage.loadImage(from: imageUrl) { [weak self] (image) in
+                guard let strongSelf = self else { return }
+                strongSelf.exerciseImageView.image = image
             }
-            
+            exerciseNameLabel.text = "\(PracticeSessionsCellConstants.exerciseName) \(exercise.name)"
+            excerciseBpmLabel.text = "\(PracticeSessionsCellConstants.practisedAt) \(exercise.practicedAtBpm) \(PracticeSessionsCellConstants.bpm)"
         }
     }
     
-    required init?(coder aDecoder: NSCoder) {
-        fatalError(PracticeSessionsCellConstants.fatalError)
-    }
+    required init?(coder aDecoder: NSCoder) { fatalError(PracticeSessionsCellConstants.fatalError) }
 }
